@@ -212,7 +212,7 @@ function Upload() {
       <Row className="justify-content-md-center mt-5">
         <Col md="8">
           <Form ref={formRef} className="p-4 bg-light rounded shadow">
-            <h4 className="mb-4">Product Creation Form - TEST ONLY</h4>
+            <h4 className="mb-4">Product Creation Form - QAT</h4>
             {errorMessage && <Alert variant="danger">{errorMessage}</Alert>}
             <Row>
               <Col md="6">
