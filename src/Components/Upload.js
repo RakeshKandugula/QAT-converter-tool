@@ -153,7 +153,7 @@ function Upload() {
       return;
     }
 
-    const proxyUrl = 'https://bhk9mub853.execute-api.eu-north-1.amazonaws.com/beta-proxy';
+    const proxyUrl = 'https://bhk9mub853.execute-api.eu-north-1.amazonaws.com/beta-proxy/opil-converterTool-server-QA';
     try {
       const response = await axios.post(proxyUrl, convertedBlob, {
         headers: { 'Content-Type': 'application/octet-stream' },
