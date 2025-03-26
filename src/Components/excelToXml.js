@@ -12,6 +12,22 @@ function sanitizeKey(key) {
   return '';
 }
 
+function getUniqueHeaders(headers) {
+  var headerCounts = {};
+  var result = [];
+  for (var i = 0; i < headers.length; i++) {
+    var sanitized = sanitizeKey(headers[i]);
+    if (!headerCounts.hasOwnProperty(sanitized)) {
+      headerCounts[sanitized] = 1;
+      result.push(sanitized);
+    } else {
+      headerCounts[sanitized]++;
+      result.push(sanitized + headerCounts[sanitized]);
+    }
+  }
+  return result;
+}
+
 function convert(
   arrayBuffer,
   supplier,
@@ -48,6 +64,18 @@ function convert(
   } else if (supplierName === "testsupplier1" || supplierName === "testsupplier2") {
     console.log(`Sheet name: ${supplierName}`);
     data = XLSX.utils.sheet_to_json(workbook.Sheets[sheetName], { header: 1, range: 1});
+  } else if (supplierName === "Marc_OPolo_International_GmbH") {
+    const rawData = XLSX.utils.sheet_to_json(workbook.Sheets[sheetName], { header: 1 });
+    data = rawData.filter(row => {
+      // Count the cells that are non-null, defined, and not just whitespace.
+      const nonEmptyCells = row.filter(cell =>
+        cell !== null && cell !== undefined && String(cell).trim() !== ""
+      ).length;
+      return nonEmptyCells > 3;
+    });
+
+     poEDI='Yes';
+    
   } else {
     data = XLSX.utils.sheet_to_json(workbook.Sheets[sheetName], { header: 1 });
   }
@@ -61,7 +89,7 @@ function convert(
   const Products = root.ele('Products');
   
   // Sanitize headers from the first row of data
-  const arrList = data[0] ? data[0].map(field => sanitizeKey(field)) : [];
+  const arrList = data[0] ? getUniqueHeaders(data[0]) : [];
   console.log('Sanitized headers:', arrList);
   
   const finalListValue = [];
