@@ -48,7 +48,8 @@ export const suppliers = [
   { value: "VAGABOND_FINLAND_OY", label: "VAGABOND_FINLAND_OY" },
   { value: "VF_SCANDINAVIA_A/S", label: "VF_SCANDINAVIA_A/S" },
   { value: "LONGCHAMP_SAS", label: "LONGCHAMP_SAS" },
-  { value: "VILA_FINLAND_OY", label: "VILA_FINLAND_OY" }
+  { value: "VILA_FINLAND_OY", label: "VILA_FINLAND_OY" }, 
+  { value: "DR_MARTENS_AIRWAIR_WHOLESALE_LIMITED", label: "DR_MARTENS_AIRWAIR_WHOLESALE_LIMITED" }
 ];
 
 
