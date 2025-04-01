@@ -39,7 +39,7 @@ export const suppliers = [
   { value: "ONLINE_TEXTILE_SOLUTIONS_A/S", label: "ONLINE_TEXTILE_SOLUTIONS_A/S" },
   { value: "PRO_FASHION_OY", label: "PRO_FASHION_OY" },
   { value: "PVH_FINLAND_OY", label: "PVH_FINLAND_OY" },
-  { value: "Ralph_Lauren", label: "Ralph_Lauren" },
+  { value: "RALPH_LAUREN_SCANDINAVIA_AB_STOCKHOL", label: "RALPH_LAUREN_SCANDINAVIA_AB_STOCKHOL" },
   { value: "SAND_CPH_A/S", label: "SAND_CPH_A/S" },
   { value: "SANETTA,__GEBRUDER_AMMANN_GMBH_&_CO._KG", label: "SANETTA,__GEBRUDER_AMMANN_GMBH_&_CO._KG" },
   { value: "SECOND_FEMALE_APS", label: "SECOND_FEMALE_APS" },
