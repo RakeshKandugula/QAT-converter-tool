@@ -77,10 +77,14 @@ function convert(
       ).length;
       return nonEmptyCells > 3;
     });
-
-     poEDI='Yes';
-    
-  } else {
+     poEDI='Yes';    
+  }else if (supplierName === "STICHD_BV_HERTOGENBOSCH") {
+      const sheet = workbook.Sheets[sheetName];
+      const fullRange = XLSX.utils.decode_range(sheet['!ref']);
+      fullRange.s.r = 2;
+      fullRange.s.c = 1;
+      data = XLSX.utils.sheet_to_json(sheet, { header: 1, range: fullRange });
+    }  else {
     data = XLSX.utils.sheet_to_json(workbook.Sheets[sheetName], { header: 1 });
   }
   
