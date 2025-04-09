@@ -43,6 +43,7 @@ export const suppliers = [
   { value: "SAND_CPH_A/S", label: "SAND_CPH_A/S" },
   { value: "SANETTA,__GEBRUDER_AMMANN_GMBH_&_CO._KG", label: "SANETTA,__GEBRUDER_AMMANN_GMBH_&_CO._KG" },
   { value: "SECOND_FEMALE_APS", label: "SECOND_FEMALE_APS" },
+  { value: "STICHD_BV_HERTOGENBOSCH", label: "STICHD_BV_HERTOGENBOSCH" },
   { value: "testsupplier1", label: "testsupplier1" },
   { value: "testsupplier2", label: "testsupplier2" },
   { value: "VAGABOND_FINLAND_OY", label: "VAGABOND_FINLAND_OY" },
