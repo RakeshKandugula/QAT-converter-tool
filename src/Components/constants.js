@@ -17,6 +17,7 @@ export const suppliers = [
   { value: "ACC3SS_OY", label: "ACC3SS_OY" },
   { value: "ACNE_STUDIOS_AB", label: "ACNE_STUDIOS_AB" },
   { value: "ADIDAS_SUOMI_OY", label: "ADIDAS_SUOMI_OY" },
+  { value: "ANDIATA_OY", label: "ANDIATA_OY" },
   { value: "GIORGIO_ARMANI_S.P.A.", label: "GIORGIO_ARMANI_S.P.A." },
   { value: "BESTSELLER_WHOLESALE_FINLAND_OY", label: "BESTSELLER_WHOLESALE_FINLAND_OY" },
   { value: "C.W.F._CHILDREN_WORLDWIDE_FASHION", label: "C.W.F._CHILDREN_WORLDWIDE_FASHION" },
