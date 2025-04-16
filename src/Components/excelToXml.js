@@ -84,6 +84,23 @@ function convert(
       fullRange.s.r = 2;
       fullRange.s.c = 1;
       data = XLSX.utils.sheet_to_json(sheet, { header: 1, range: fullRange });
+    }else if (supplierName === "DK_COMPANY_FINLAND_OY") {
+      const sheet = workbook.Sheets[sheetName];
+      const fullRange = XLSX.utils.decode_range(sheet['!ref']);
+      
+      const cellRowA1 = sheet["A1"];
+      var headerPresent = false;
+      if (cellRowA1  && cellRowA1.v.trim() !== "") {
+        headerPresent = true;
+      }
+
+      if (headerPresent) {
+        fullRange.s.r = 0;
+      } else{
+        fullRange.s.r = 2;
+      }
+      console.log(fullRange.s);
+     data = XLSX.utils.sheet_to_json(sheet, { header: 1, range: fullRange });
     }  else {
     data = XLSX.utils.sheet_to_json(workbook.Sheets[sheetName], { header: 1 });
   }
