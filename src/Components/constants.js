@@ -52,7 +52,9 @@ export const suppliers = [
   { value: "LONGCHAMP_SAS", label: "LONGCHAMP_SAS" },
   { value: "VILA_FINLAND_OY", label: "VILA_FINLAND_OY" }, 
   { value: "MULBERRY_GROUP_PLC", label: "MULBERRY_GROUP_PLC" }, 
-  { value: "DR_MARTENS_AIRWAIR_WHOLESALE_LIMITED", label: "DR_MARTENS_AIRWAIR_WHOLESALE_LIMITED" }
+  { value: "DR_MARTENS_AIRWAIR_WHOLESALE_LIMITED", label: "DR_MARTENS_AIRWAIR_WHOLESALE_LIMITED" },
+  { value: "FALKE_KGAA_SCHMALLENBERG", label: "FALKE_KGAA" },
+  { value: "VIKING_JALKINEET_OY", label: "VIKING_JALKINEET_OY" }
 ];
 
 
