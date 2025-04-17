@@ -28,6 +28,23 @@ function getUniqueHeaders(headers) {
   return result;
 }
 
+function findHeaderRow(sheet) {
+  const data = XLSX.utils.sheet_to_json(sheet, { header: 1 });
+  const range = XLSX.utils.decode_range(sheet['!ref']);  
+  // Loop through the first 10 rows (or total available rows, whichever is smaller)
+  for (let r = 0; r < Math.min(data.length, 10); r++) {
+    const rowData = data[r] || []; // Make sure we have an array, even if the row is empty
+    const nonEmptyCells = rowData.filter(cell => String(cell).trim() !== "");
+    console.log("Row " + (range.s.r + r) + ": ", nonEmptyCells+"-->"+nonEmptyCells.length);
+    // If the row has more than 5 non-empty cells, we consider it the header row.
+    if (nonEmptyCells.length > 5) {
+      // Adjust the row number to match the actual Excel row number.
+      return range.s.r + r;
+    }
+  }
+  return range.s.r;
+}
+
 function convert(
   arrayBuffer,
   supplier,
@@ -69,15 +86,11 @@ function convert(
     console.log(`Sheet name: ${supplierName}`);
     data = XLSX.utils.sheet_to_json(workbook.Sheets[sheetName], { header: 1, range: 1});
   } else if (supplierName === "Marc_OPolo_International_GmbH") {
-    const rawData = XLSX.utils.sheet_to_json(workbook.Sheets[sheetName], { header: 1 });
-    data = rawData.filter(row => {
-      // Count the cells that are non-null, defined, and not just whitespace.
-      const nonEmptyCells = row.filter(cell =>
-        cell !== null && cell !== undefined && String(cell).trim() !== ""
-      ).length;
-      return nonEmptyCells > 3;
-    });
-     poEDI='Yes';    
+    const sheet = workbook.Sheets[sheetName];
+    const fullRange = XLSX.utils.decode_range(sheet['!ref']);
+    fullRange.s.r=findHeaderRow(sheet);
+    console.log(fullRange.s);
+    data = XLSX.utils.sheet_to_json(sheet, { header: 1, range: fullRange });      
   }else if (supplierName === "STICHD_BV_HERTOGENBOSCH") {
       const sheet = workbook.Sheets[sheetName];
       const fullRange = XLSX.utils.decode_range(sheet['!ref']);
@@ -101,7 +114,14 @@ function convert(
       }
       console.log(fullRange.s);
      data = XLSX.utils.sheet_to_json(sheet, { header: 1, range: fullRange });
-    }  else {
+    }else if (supplierName === "VIKING_JALKINEET_OY") {
+      const sheet = workbook.Sheets[sheetName];
+      const fullRange = XLSX.utils.decode_range(sheet['!ref']);
+      fullRange.s.r=findHeaderRow(sheet);
+      console.log(fullRange.s);
+     data = XLSX.utils.sheet_to_json(sheet, { header: 1, range: fullRange });
+    }    
+  else {
     data = XLSX.utils.sheet_to_json(workbook.Sheets[sheetName], { header: 1 });
   }
   
