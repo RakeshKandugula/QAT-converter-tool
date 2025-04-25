@@ -83,6 +83,7 @@ function Upload() {
 
         // Convert the file to XML (note: lifestyle parameters have been removed)
         const result = convert(
+          file,
           arrayBuffer,
           selectedSupplier,
           selectedBrand,
