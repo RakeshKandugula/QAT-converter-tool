@@ -82,7 +82,9 @@ function convert(
     data = XLSX.utils.sheet_to_json(workbook.Sheets["EAN with Measurements"], { header: 1 });
   } else if (supplierName === "VAGABOND_FINLAND_OY") {
     data = XLSX.utils.sheet_to_json(workbook.Sheets[sheetName], { header: 1, range: 2 });
-  } else if (supplierName === "testsupplier1" || supplierName === "testsupplier2") {
+  }else if (supplierName === "FALKE_KGAA_SCHMALLENBERG") {
+    data = XLSX.utils.sheet_to_json(workbook.Sheets[sheetName], {header: 1, raw:false});
+  }else if (supplierName === "testsupplier1" || supplierName === "testsupplier2") {
     console.log(`Sheet name: ${supplierName}`);
     data = XLSX.utils.sheet_to_json(workbook.Sheets[sheetName], { header: 1, range: 1});
   } else if (supplierName === "Marc_OPolo_International_GmbH") {
