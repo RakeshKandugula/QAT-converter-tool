@@ -2,7 +2,7 @@ import * as XLSX from 'xlsx';
 import * as xmlbuilder from 'xmlbuilder';
 
 function allowedFile(filename) {
-  return filename.split('.').pop().toLowerCase() === 'xlsx'||filename.split('.').pop().toLowerCase() === 'csv';
+  return filename.split('.').pop().toLowerCase() === 'xlsx'||filename.split('.').pop().toLowerCase() === 'csv'|| filename.split('.').pop().toLowerCase() === 'xls';
 }
 
 function sanitizeKey(key) {
@@ -96,6 +96,8 @@ function convert(
     data = XLSX.utils.sheet_to_json(workbook.Sheets[sheetName], { header: 1, range: 2 });
   }else if (supplierName === "FALKE_KGAA_SCHMALLENBERG") {
     data = XLSX.utils.sheet_to_json(workbook.Sheets[sheetName], {header: 1, raw:false});
+  }else if (supplierName === "TIGER_OF_SWEDEN_FINLAND_OY") {
+    data = XLSX.utils.sheet_to_json(workbook.Sheets[sheetName], { header: 1,range: 4, raw: false });
   }else if (supplierName === "testsupplier1" || supplierName === "testsupplier2") {
     console.log(`Sheet name: ${supplierName}`);
     data = XLSX.utils.sheet_to_json(workbook.Sheets[sheetName], { header: 1, range: 1});
