@@ -57,7 +57,8 @@ export const suppliers = [
   { value: "VIKING_JALKINEET_OY", label: "VIKING_JALKINEET_OY" },
   { value: "ECCO_KENKA_OY", label: "ECCO_KENKA_OY" },
   { value: "TIGER_OF_SWEDEN_FINLAND_OY", label: "TIGER_OF_SWEDEN_FINLAND_OY" },
-  { value: "BIRKENSTOCK_GMBH_&_KG", label: "BIRKENSTOCK_GMBH_&_KG" }
+  { value: "BIRKENSTOCK_GMBH_&_KG", label: "BIRKENSTOCK_GMBH_&_KG" },
+  { value: "OSCAR_JACOBSON_AB", label: "OSCAR_JACOBSON_AB" }
 ];
 
 
