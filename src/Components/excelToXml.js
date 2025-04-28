@@ -98,6 +98,8 @@ function convert(
     data = XLSX.utils.sheet_to_json(workbook.Sheets[sheetName], {header: 1, raw:false});
   }else if (supplierName === "TIGER_OF_SWEDEN_FINLAND_OY") {
     data = XLSX.utils.sheet_to_json(workbook.Sheets[sheetName], { header: 1,range: 4, raw: false });
+  }else if (supplierName === "OSCAR_JACOBSON_AB") {
+    data = XLSX.utils.sheet_to_json(workbook.Sheets[sheetName], { header: 1,range: 2,raw: false });
   }else if (supplierName === "testsupplier1" || supplierName === "testsupplier2") {
     console.log(`Sheet name: ${supplierName}`);
     data = XLSX.utils.sheet_to_json(workbook.Sheets[sheetName], { header: 1, range: 1});
