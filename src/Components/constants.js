@@ -58,7 +58,8 @@ export const suppliers = [
   { value: "ECCO_KENKA_OY", label: "ECCO_KENKA_OY" },
   { value: "TIGER_OF_SWEDEN_FINLAND_OY", label: "TIGER_OF_SWEDEN_FINLAND_OY" },
   { value: "BIRKENSTOCK_GMBH_&_KG", label: "BIRKENSTOCK_GMBH_&_KG" },
-  { value: "OSCAR_JACOBSON_AB", label: "OSCAR_JACOBSON_AB" }
+  { value: "OSCAR_JACOBSON_AB", label: "OSCAR_JACOBSON_AB" },
+  { value: "REIMA_EUROPE_OY_/_PL_VAT", label: "REIMA_EUROPE_OY_/_PL_VAT" }
 ];
 
 
