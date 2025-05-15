@@ -219,9 +219,8 @@ function Upload() {
               <Col md="6">
                 {/* Left Column Fields */}
                 <Form.Group className="mb-3">
-                  <Form.Label>Supplier <span style={{ color: "red" }}>*</span></Form.Label>
-                  <Select
-                    options={suppliers.sort((a, b) => a.value.localeCompare(b.value))}
+                  <Form.Label>Supplier <span style={{ color: "red" }}>*</span></Form.Label>                  <Select
+                    options={suppliers()}
                     value={selectedSupplier}
                     onChange={handleSupplierChange}
                     placeholder="Select a supplier..."

@@ -78,7 +78,7 @@ function convert(
     console.log(inputFileName);
      workbook = XLSX.read(arrayBuffer, { type: 'array' });
   }
-  const supplierName = supplier['value'];
+  const supplierName = supplier.value;
   //const workbook = XLSX.read(arrayBuffer, { type: 'array' });
   const sheetName = workbook.SheetNames[0];
   console.log(`Sheet name: ${sheetName}`);
