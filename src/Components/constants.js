@@ -21,8 +21,8 @@ export const brands = {
     { value: "Eastpak", label: "Eastpak" }
   ],
   ADIDAS_SUOMI_OY: [
-    { value: "ADIDAS_SUOMI_OY(RTW)", label: "ADIDAS_SUOMI_OY(RTW)" },
-    { value: "ADIDAS_SUOMI_OY(Sports)", label: "ADIDAS_SUOMI_OY(Sports)" }
+    { value: "(RTW)", label: "ADIDAS_SUOMI_OY(RTW)" },
+    { value: "(Sports)", label: "ADIDAS_SUOMI_OY(Sports)" }
   ],
   "DK_COMPANY_FINLAND_OY": [
     { value: "Gestuz", label: "Gestuz" },
