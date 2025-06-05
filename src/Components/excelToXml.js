@@ -149,8 +149,9 @@ function convert(
      data = [ data[0], ...data.slice(2)];
     }
     //console.log("Processed Didriksons data (header=orig row7, dropped row8):", data);
-}    
-  else {
+}else if (supplierName === "GIORGIO_ARMANI_S.P.A.") {
+    data = XLSX.utils.sheet_to_json(workbook.Sheets["Sheet1"], { header: 1 });
+  }else {
     data = XLSX.utils.sheet_to_json(workbook.Sheets[sheetName], { header: 1 });
   }
   
