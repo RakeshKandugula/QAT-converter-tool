@@ -178,6 +178,13 @@ function Upload() {
   const handleSupplierChange = (selectedOption) => {
     setSelectedSupplier(selectedOption);
     setSelectedBrand(null); // Reset brand selection when supplier changes
+  if (selectedOption && (selectedOption.label === "J.LINDEBERG_AB" || selectedOption.value === "J.LINDEBERG_AB")) {
+    setLifestage("Adult");
+    setGender("Men");
+  } else {
+    setLifestage("");
+    setGender("");
+  }
   };
 
   const handleBrandChange = (selectedOption) => {
