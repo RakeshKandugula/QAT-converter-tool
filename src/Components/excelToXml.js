@@ -68,7 +68,7 @@ function convert(
 ) {
   const inputFileName = file.name;
   let workbook="";
-  if (inputFileName.includes('csv')) {
+  if (inputFileName.includes('csv') || inputFileName.includes('CSV')) {
     // Handle CSV file
     console.log(inputFileName);
     const csvContent = new TextDecoder('utf-8').decode(arrayBuffer);
@@ -178,7 +178,11 @@ function convert(
     for (let j = 0; j < arrList.length; j++) {
       let cellValue = data[i][j];
       if (typeof cellValue === 'string') {
-        cellValue = cellValue.replace(/[\r\n]/g, ' ').trim();
+      if(cellValue.startsWith('=') || cellValue.startsWith('\\')){
+         cellValue = cellValue.replace(/^[=\s\\]+/, ' ').trim();
+      }else{
+         cellValue = cellValue.replace(/[\r\n]/g, "").trim();
+      }
       }
       dictFinal[arrList[j]] = cellValue == null ? "" : cellValue;
       if (cellValue !== undefined && cellValue !== "") {
