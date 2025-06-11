@@ -89,7 +89,6 @@ export const suppliers = [
   "DIEMME_FASHION_GROUP_SRL",
   "DIESEL_S.P.A",
   "DK_COMPANY_FINLAND_OY",
-  "DKH_RETAIL_LTD_(BO_GRANT_THORNTON_EFFICIENTIA)",
   "DR_MARTENS_AIRWAIR_WHOLESALE_LIMITED",
   "DRAGON_DIFFUSION_SPRL",
   "DSQUARED2_SPA",
@@ -369,7 +368,8 @@ export const suppliers = [
 
 export const specialSuppliers = [
   { value: "FALKE_KGAA_SCHMALLENBERG", label: "FALKE_KGAA" },
-  { value: "ECCO_KENKA_OY", label: "ECCO_KENKÄ_OY" }
+  { value: "ECCO_KENKA_OY", label: "ECCO_KENKÄ_OY" },
+  {value: "DKH_RETAIL_LTD_(BO_GRANT_THORNTON_EFFIC)",  label: "DKH_RETAIL_LTD_(BO_GRANT_THORNTON_EFFICIENTIA)"}
 ];
 
 
