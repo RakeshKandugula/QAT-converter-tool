@@ -187,7 +187,7 @@ export const phases = {
 export const lifestyles = ["Mens", "Womens", "Kids", "None"];
 export const lifestages = ["Adult", "Kids"];
 export const genders = ["Men", "Women", "Boys", "Girls", "Unisex"];
-export const ST_users = ["PROKING", "ABELKAR", "BALAMAR", "CABLLAI", "LOREEGI", "PAAJJOH", "EXTSABA", "SUKKSHA", "KANDRAK", "KLIMMAK", "PIIPPI", "HUTTING", "NIKKJEN","MISIIRI","POUDGUN"];
+export const ST_users = ["PROKING", "ABELKAR", "BALAMAR", "CABLLAI", "LOREEGI", "PAAJJOH", "EXTSABA", "SUKKSHA", "KANDRAK", "KLIMMAK", "PIIPPI", "HUTTING", "NIKKJEN","MISIIRI","POUDGUN","EXTVNAG","EXTPSURYA"];
 
 export const ticketTypes = [
   { value: "RF29", label: "RF29" },
