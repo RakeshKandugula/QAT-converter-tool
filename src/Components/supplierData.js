@@ -369,7 +369,9 @@ export const suppliers = [
 export const specialSuppliers = [
   { value: "FALKE_KGAA_SCHMALLENBERG", label: "FALKE_KGAA" },
   { value: "ECCO_KENKA_OY", label: "ECCO_KENKÄ_OY" },
-  {value: "DKH_RETAIL_LTD_(BO_GRANT_THORNTON_EFFIC)",  label: "DKH_RETAIL_LTD_(BO_GRANT_THORNTON_EFFICIENTIA)"}
+  {value: "DKH_RETAIL_LTD_(BO_GRANT_THORNTON_EFFIC)",  label: "DKH_RETAIL_LTD_(BO_GRANT_THORNTON_EFFICIENTIA)"},
+  {value: "Samsoe_&_Samsoe_Whole_Sale_ApS", label: "Samsøe_&_Samsøe_Whole_Sale_ApS"}
+
 ];
 
 
