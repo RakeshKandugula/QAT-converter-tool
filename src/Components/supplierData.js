@@ -275,7 +275,7 @@ export const suppliers = [
   "S.OLIVER_SALES_GMBH_&_CO._KG",
   "SADDLER_SCANDINAVIA_AB",
   "SAKARI_SAUSO_OY",
-  "Samsøe_&_Samsøe_Whole_Sale_ApS",
+
   "SAND_CPH_A/S",
   "SANDQVIST_BAGS_AND_ITEMS_AB",
   "SANETTA,__GEBRUDER_AMMANN_GMBH_&_CO._KG",
