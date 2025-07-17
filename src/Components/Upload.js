@@ -154,10 +154,17 @@ function Upload() {
       return;
     }
 
-    const proxyUrl = 'https://bhk9mub853.execute-api.eu-north-1.amazonaws.com/beta-proxy/opil-converterTool-server-QA';
+   
+    const proxyUrl = 'https://p8dzzvc71j.execute-api.eu-west-1.amazonaws.com/default/opil-converter-tool-to-pim'; // Replace with your actual API Gateway URL
+
+    const environment = 'qa';
+
     try {
       const response = await axios.post(proxyUrl, convertedBlob, {
-        headers: { 'Content-Type': 'application/octet-stream' },
+        headers: {
+          'Content-Type': 'application/octet-stream',
+          'X-Environment': environment
+        },
       });
 
       if (response.status === 200) {
