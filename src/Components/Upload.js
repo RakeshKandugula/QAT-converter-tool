@@ -188,7 +188,10 @@ function Upload() {
   if (selectedOption && (selectedOption.label === "J.LINDEBERG_AB" || selectedOption.value === "J.LINDEBERG_AB")) {
     setLifestage("Adult");
     setGender("Men");
-  } else {
+  }else if (selectedOption && (selectedOption.label === "ROCKSERI_OY" || selectedOption.value === "ROCKSERI_OY")) {
+    setLifestage("Adult");
+    setGender("Women");
+  }else {
     setLifestage("");
     setGender("");
   }
