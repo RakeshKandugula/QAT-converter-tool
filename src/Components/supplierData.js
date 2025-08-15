@@ -231,7 +231,7 @@ export const suppliers = [
   "OFFSPRING_A/S",
   "OLIVIA_VON_HALLE",
   "OLYMP_BEZNER_KG",
-  "ON_AG",
+  "BO_ON_AG",
   "ONLINE_TEXTILE_SOLUTIONS_A/S",
   "OPUS_GMBH",
   "OSCAR_JACOBSON_AB",
