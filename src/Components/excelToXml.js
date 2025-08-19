@@ -153,7 +153,20 @@ function convert(
     //console.log("Processed Didriksons data (header=orig row7, dropped row8):", data);
 }else if (supplierName === "GIORGIO_ARMANI_S.P.A.") {
     data = XLSX.utils.sheet_to_json(workbook.Sheets["Sheet1"], { header: 1 });
-  }else {
+}else if (supplierName === "LINDEX_AB") {
+      const sheet = workbook.Sheets[sheetName];
+      const fullRange = XLSX.utils.decode_range(sheet['!ref']);
+      fullRange.s.r=findHeaderRow(sheet);
+      console.log(fullRange.s);
+     data = XLSX.utils.sheet_to_json(sheet, { header: 1, range: fullRange });
+    }else if(supplierName==="IMAC_S.P.A."){
+      const sheet = workbook.Sheets[sheetName];
+      const fullRange = XLSX.utils.decode_range(sheet['!ref']);
+      fullRange.s.r=findHeaderRow(sheet);
+      console.log(fullRange.s);
+     data = XLSX.utils.sheet_to_json(sheet, { header: 1, range: fullRange });
+    }
+ else {
     data = XLSX.utils.sheet_to_json(workbook.Sheets[sheetName], { header: 1 });
   }
   
