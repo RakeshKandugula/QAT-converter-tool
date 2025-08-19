@@ -48,7 +48,15 @@ export const brands = {
   "GIORGIO_ARMANI_S.P.A.": [
     { value: "ARMANI EXCHANGE", label: "ARMANI EXCHANGE" },
     { value: "Emporio Armani", label: "EMPORIO ARMANI" }
-  ]
+  ],
+  "DEDIMAX_S.R.L.": [
+    { value: "EMM", label: "Emme Marella / Marella" },
+    { value: "Pennyblack", label: "Pennyblack" }
+  ],
+  "S_GROUP_APS": [
+    { value: "Paul Smith", label: "Paul Smith" },
+    { value: "PS Paul Smith", label: "PS Paul Smith" }
+  ]  
 };
 
 
