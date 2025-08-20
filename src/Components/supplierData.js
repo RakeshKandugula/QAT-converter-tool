@@ -1,6 +1,7 @@
 // This file contains all supplier data
 export const suppliers = [
   // Base suppliers where value and label are the same
+  "109_SAS",
   "A.KJÆRBEDE_ApS",
   "A.P.C._SAS",
   "ACC3SS_OY",
