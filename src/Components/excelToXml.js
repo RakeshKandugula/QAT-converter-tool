@@ -163,7 +163,11 @@ function convert(
       const sheet = workbook.Sheets[sheetName];
       const fullRange = XLSX.utils.decode_range(sheet['!ref']);
       fullRange.s.r=findHeaderRow(sheet);
-      console.log(fullRange.s);
+     data = XLSX.utils.sheet_to_json(sheet, { header: 1, range: fullRange });
+    }else if(supplierName==="GSL_AB"){
+      const sheet = workbook.Sheets[sheetName];
+      const fullRange = XLSX.utils.decode_range(sheet['!ref']);
+      fullRange.s.r=findHeaderRow(sheet);
      data = XLSX.utils.sheet_to_json(sheet, { header: 1, range: fullRange });
     }
  else {
