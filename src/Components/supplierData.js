@@ -2,7 +2,7 @@
 export const suppliers = [
   // Base suppliers where value and label are the same
   "109_SAS",
-  "A.KJÆRBEDE_ApS",
+  //"A.KJÆRBEDE_ApS",
   "A.P.C._SAS",
   "ACC3SS_OY",
   "ACNE_STUDIOS_AB",
@@ -373,7 +373,9 @@ export const specialSuppliers = [
   { value: "DKH_RETAIL_LTD_(BO_GRANT_THORNTON_EFFIC)",  label: "DKH_RETAIL_LTD_(BO_GRANT_THORNTON_EFFICIENTIA)" },
   { value: "Samsoe_&_Samsoe_Whole_Sale_ApS", label: "Samsøe_&_Samsøe_Whole_Sale_ApS" },
   { value: "BJORN_BORG_FINLAND_OY", label: "BJÖRN_BORG_FINLAND_OY" },
-  { value: "MA_FASHION_HOLDING_OU", label:"MA_FASHION_HOLDING_OÜ" }
+  { value: "MA_FASHION_HOLDING_OU", label:"MA_FASHION_HOLDING_OÜ" },
+  {value: "A.KJAERBEDE_ApS", label: "A.KJÆRBEDE_ApS"}
+
 ];
 
 
