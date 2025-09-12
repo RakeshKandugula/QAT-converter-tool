@@ -9,14 +9,20 @@ function sanitizeKey(key) {
   if (typeof key === 'string') {
     return key.replace(/[\r\n]+/g, ' ').trim();
   }
-  return '';
+  return 'Untitled';
 }
 
 function getUniqueHeaders(headers) {
   var headerCounts = {};
   var result = [];
+  var untitledCount = 0;
   for (var i = 0; i < headers.length; i++) {
     var sanitized = sanitizeKey(headers[i]);
+    if (sanitized === 'Untitled') {
+      untitledCount++;
+      var newHeader = `Untitled ${untitledCount}`;
+      result.push(newHeader);
+    } else {
     if (!headerCounts.hasOwnProperty(sanitized)) {
       headerCounts[sanitized] = 1;
       result.push(sanitized);
@@ -24,8 +30,9 @@ function getUniqueHeaders(headers) {
       headerCounts[sanitized]++;
       result.push(sanitized + headerCounts[sanitized]);
     }
-  }
-  return result;
+   }
+ }
+   return result;
 }
 
 function findHeaderRow(sheet) {
