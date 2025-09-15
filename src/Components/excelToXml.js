@@ -96,7 +96,10 @@ function convert(
   } else if (supplierName === "PVH_FINLAND_OY") {
     data = XLSX.utils.sheet_to_json(workbook.Sheets["product info"], { header: 1 });
   } else if (supplierName === "LONGCHAMP_SAS") {
-    data = XLSX.utils.sheet_to_json(workbook.Sheets["DETAIL"], { header: 1 });
+    const sheet = workbook.Sheets["PRODUCT DATA"];
+    const fullRange = XLSX.utils.decode_range(sheet['!ref']);
+    fullRange.s.r = findHeaderRow(sheet);
+    data = XLSX.utils.sheet_to_json(sheet, { header: 1, range: fullRange });
   } else if (supplierName === "MULBERRY_GROUP_PLC") {
     data = XLSX.utils.sheet_to_json(workbook.Sheets["EAN with Measurements"], { header: 1 });
   } else if (supplierName === "VAGABOND_FINLAND_OY") {
