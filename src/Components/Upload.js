@@ -341,6 +341,7 @@ function Upload() {
           })
         }}
         />
+         </Form.Group>
                 <Form.Group className="mb-3">
                   <Form.Label>Assortment Lead <span style={{ color: "red" }}>*</span></Form.Label>
                   <Form.Select aria-label="Select Assortment Lead" onChange={(e) => setBuyer(e.target.value)} value={buyer} required>
