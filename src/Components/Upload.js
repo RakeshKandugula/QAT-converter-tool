@@ -3,7 +3,7 @@ import { Container, Row, Col, Form, Alert, Modal, Button, Toast, ToastContainer 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Select from 'react-select';
 import { convert, allowedFile } from "./excelToXml";  // Ensure this is correctly implemented
-import { suppliers, buyers, seasons, phases, lifestages, genders, ST_users, ticketTypes, poLocations, poTypes, poEDIs, orderPriceTags, multiplicationFactorOptions, brands } from './constants';
+import { suppliers, departments, getDepartmentsForSupplier, departmentGenderMap, departmentLifestageMap, buyers, seasons, phases, lifestages, genders, ST_users, ticketTypes, poLocations, poTypes, poEDIs, orderPriceTags, multiplicationFactorOptions, brands } from './constants';
 import SubmitButton from './SubmitButton';  // Import the new component
 import '../styles/styles.css';
 import axios from 'axios';
@@ -12,6 +12,7 @@ function Upload() {
   const [file, setFile] = useState(null);
   const [errorMessage, setErrorMessage] = useState(null);
   const [selectedSupplier, setSelectedSupplier] = useState(null);
+  const [selectedDepartment, setselectedDepartment] = useState("");
   const [selectedBrand, setSelectedBrand] = useState("");
   const [buyer, setBuyer] = useState(null);
   const [selectedSeason, setSelectedSeason] = useState("");
@@ -39,6 +40,7 @@ function Upload() {
     setFile(null);
     setErrorMessage(null);
     setSelectedSupplier(null);
+    setselectedDepartment("");
     setSelectedBrand("");
     setBuyer("");
     setSelectedSeason("");
@@ -66,7 +68,7 @@ function Upload() {
 
   // Step 1: Convert file and trigger local download before confirmation
   const handleConvertAndDownload = () => {
-    if (!file || !selectedSupplier || !buyer || !ST_user || !lifestage) {
+    if (!file || !selectedSupplier || !buyer || !ST_user || !lifestage ||!selectedDepartment) {
       setErrorMessage('Please fill out all the mandatory fields.');
       return;
     }
@@ -86,6 +88,7 @@ function Upload() {
           file,
           arrayBuffer,
           selectedSupplier,
+          selectedDepartment,
           selectedBrand,
           buyer,
           selectedSeason,
@@ -185,20 +188,60 @@ function Upload() {
   const handleSupplierChange = (selectedOption) => {
     setSelectedSupplier(selectedOption);
     setSelectedBrand(null); // Reset brand selection when supplier changes
-  if (selectedOption && (selectedOption.label === "J.LINDEBERG_AB" || selectedOption.value === "J.LINDEBERG_AB")) {
-    setLifestage("Adult");
-    setGender("Men");
-  }else if (selectedOption && (selectedOption.label === "ROCKSERI_OY" || selectedOption.value === "ROCKSERI_OY")) {
-    setLifestage("Adult");
-    setGender("Women");
-  }else {
-    setLifestage("");
-    setGender("");
-  }
+    setselectedDepartment(null);
   };
 
   const handleBrandChange = (selectedOption) => {
     setSelectedBrand(selectedOption);
+  };
+
+  const supplierDepts = selectedSupplier
+    ? getDepartmentsForSupplier(selectedSupplier.value).map(d => ({
+        ...d,
+        isSupplierDept: true
+      }))
+    : [];
+
+  const allOptions = selectedSupplier
+    ? [
+        ...supplierDepts,
+        ...departments().filter(d => !supplierDepts.some(sd => sd.value === d.value))
+      ]
+    : departments();
+
+ const handleDepartmentChange = (selectedOption) => {
+    setselectedDepartment(selectedOption||" ");
+     if (selectedOption?.value === "MULTIPLE_DEPARTMENTS") {
+    // Reset department, gender, lifestage → nothing added
+    setGender("");
+    setLifestage("");
+    return;
+  }
+    if (selectedOption) {
+    const deptId = selectedOption.value;
+    
+    // Set Gender
+    if (departmentGenderMap.Men.includes(deptId)) {
+      setGender("Men");
+    } else if (departmentGenderMap.Women.includes(deptId)) {
+      setGender("Women");
+    }  else {
+      setGender("");
+    }
+
+    // Set Lifestage
+    if (departmentLifestageMap.Adult.includes(deptId)) {
+      setLifestage("Adult");
+    } else if (departmentLifestageMap.Kids.includes(deptId)) {
+      setLifestage("Kids");
+    } else {
+      setLifestage("");
+    }
+
+  } else {
+    setGender("");
+    setLifestage("");
+  }
   };
 
   const handlePOLocationChange = (selectedOption) => {
@@ -275,6 +318,29 @@ function Upload() {
                     />
                   </Form.Group>
                 )}
+        <Form.Group className="mb-3">
+       <Form.Label> Departments <span style={{ color: "red" }}>*</span></Form.Label>
+       <Select
+        options={allOptions}
+        onChange={handleDepartmentChange}
+        value={selectedDepartment || null}
+        placeholder="Select a department..."
+        isSearchable={true}
+        isClearable={true}
+        getOptionLabel={(option) => option.label}
+        getOptionValue={(option) => option.value}
+        styles={{
+        option: (provided, state) => ({
+        ...provided,
+        backgroundColor: state.isFocused
+        ? "#0d6efd" // very dark blue on hover
+        : state.data.isSupplierDept
+        ? "#d6e9ff" // grey-blue for supplier departments when not focused
+        : "white",
+          color: state.isFocused ? "white" : "black"
+          })
+        }}
+        />
                 <Form.Group className="mb-3">
                   <Form.Label>Assortment Lead <span style={{ color: "red" }}>*</span></Form.Label>
                   <Form.Select aria-label="Select Assortment Lead" onChange={(e) => setBuyer(e.target.value)} value={buyer} required>
