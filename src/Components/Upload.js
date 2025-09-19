@@ -318,30 +318,7 @@ function Upload() {
                     />
                   </Form.Group>
                 )}
-        <Form.Group className="mb-3">
-       <Form.Label> Departments <span style={{ color: "red" }}>*</span></Form.Label>
-       <Select
-        options={allOptions}
-        onChange={handleDepartmentChange}
-        value={selectedDepartment || null}
-        placeholder="Select a department..."
-        isSearchable={true}
-        isClearable={true}
-        getOptionLabel={(option) => option.label}
-        getOptionValue={(option) => option.value}
-        styles={{
-        option: (provided, state) => ({
-        ...provided,
-        backgroundColor: state.isFocused
-        ? "#0d6efd" // very dark blue on hover
-        : state.data.isSupplierDept
-        ? "#d6e9ff" // grey-blue for supplier departments when not focused
-        : "white",
-          color: state.isFocused ? "white" : "black"
-          })
-        }}
-        />
-         </Form.Group>
+        
                 <Form.Group className="mb-3">
                   <Form.Label>Assortment Lead <span style={{ color: "red" }}>*</span></Form.Label>
                   <Form.Select aria-label="Select Assortment Lead" onChange={(e) => setBuyer(e.target.value)} value={buyer} required>
