@@ -347,7 +347,7 @@ function Upload() {
                 <Form.Group className="mb-3">
                   <Form.Label>Assortment Lead <span style={{ color: "red" }}>*</span></Form.Label>
                   <Form.Select aria-label="Select Assortment Lead" onChange={(e) => setBuyer(e.target.value)} value={buyer} required>
-                  <option value="" disabled selected>Select Assortment Lead...</option>
+                  <option value="" disabled>Select Assortment Lead...</option>
                     {buyers.map((b, index) => (
                   <option key={index} value={b}>{b}</option>         
                     ))}
@@ -487,9 +487,9 @@ function Upload() {
                 </Form.Group>
               </Col>
             </Row>
+          <SubmitButton onClick={handleConvertAndDownload} />
           </Form>
           {/* When the user clicks submit, the file will be converted, downloaded, and then the confirmation modal appears */}
-          <SubmitButton onClick={handleConvertAndDownload} />
         </Col>
       </Row>
     </Container>
