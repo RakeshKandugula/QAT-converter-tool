@@ -157,9 +157,10 @@ function Upload() {
       return;
     }
 
-    const proxyUrl = 'https://p8dzzvc71j.execute-api.eu-west-1.amazonaws.com/default/opil-converter-tool-to-pim';
+      
+    const proxyUrl = 'https://p8dzzvc71j.execute-api.eu-west-1.amazonaws.com/default/opil-converter-tool-to-pim'; // Replace with your actual API Gateway URL
 
-    const environment = 'tst';
+    const environment = 'qa';
 
     try {
       const response = await axios.post(proxyUrl, convertedBlob, {
