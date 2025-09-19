@@ -3,7 +3,7 @@ import { Container, Row, Col, Form, Alert, Modal, Button, Toast, ToastContainer 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Select from 'react-select';
 import { convert, allowedFile } from "./excelToXml";  // Ensure this is correctly implemented
-import { suppliers, departments,getDepartmentsForSupplier,departmentGenderMap,departmentLifestageMap, buyers, seasons, phases, lifestages, genders, ST_users, ticketTypes, poLocations, poTypes, poEDIs, orderPriceTags, multiplicationFactorOptions, brands } from './constants';
+import { suppliers, buyers, seasons, phases, lifestages, genders, ST_users, ticketTypes, poLocations, poTypes, poEDIs, orderPriceTags, multiplicationFactorOptions, brands } from './constants';
 import SubmitButton from './SubmitButton';  // Import the new component
 import '../styles/styles.css';
 import axios from 'axios';
@@ -12,14 +12,13 @@ function Upload() {
   const [file, setFile] = useState(null);
   const [errorMessage, setErrorMessage] = useState(null);
   const [selectedSupplier, setSelectedSupplier] = useState(null);
-  const [selectedDepartment, setselectedDepartment] = useState("");
   const [selectedBrand, setSelectedBrand] = useState("");
-  const [buyer, setBuyer] = useState("");
+  const [buyer, setBuyer] = useState(null);
   const [selectedSeason, setSelectedSeason] = useState("");
   const [selectedPhase, setSelectedPhase] = useState("");
-  const [lifestage, setLifestage] = useState("");
+  const [lifestage, setLifestage] = useState(null);
   const [gender, setGender] = useState("");
-  const [ST_user, setSTUser] = useState("");
+  const [ST_user, setSTUser] = useState(null);
   const [selectedTicketType, setSelectedTicketType] = useState("");
   const [poLocation, setPOLocation] = useState("Distribution Centre B&M");
   const [poType, setPOType] = useState("PRE");
@@ -40,7 +39,6 @@ function Upload() {
     setFile(null);
     setErrorMessage(null);
     setSelectedSupplier(null);
-    setselectedDepartment("");
     setSelectedBrand("");
     setBuyer("");
     setSelectedSeason("");
@@ -68,7 +66,7 @@ function Upload() {
 
   // Step 1: Convert file and trigger local download before confirmation
   const handleConvertAndDownload = () => {
-    if (!file || !selectedSupplier || !buyer || !ST_user || !lifestage ||!selectedDepartment ) {
+    if (!file || !selectedSupplier || !buyer || !ST_user || !lifestage) {
       setErrorMessage('Please fill out all the mandatory fields.');
       return;
     }
@@ -88,7 +86,6 @@ function Upload() {
           file,
           arrayBuffer,
           selectedSupplier,
-          selectedDepartment,
           selectedBrand,
           buyer,
           selectedSeason,
@@ -157,7 +154,7 @@ function Upload() {
       return;
     }
 
-      
+   
     const proxyUrl = 'https://p8dzzvc71j.execute-api.eu-west-1.amazonaws.com/default/opil-converter-tool-to-pim'; // Replace with your actual API Gateway URL
 
     const environment = 'qa';
@@ -188,86 +185,38 @@ function Upload() {
   const handleSupplierChange = (selectedOption) => {
     setSelectedSupplier(selectedOption);
     setSelectedBrand(null); // Reset brand selection when supplier changes
-    setselectedDepartment(null);
-    if (selectedOption && (selectedOption.label === "J.LINDEBERG_AB" || selectedOption.value === "J.LINDEBERG_AB")) {
-      setLifestage("Adult");
-      setGender("Men");
-    } else {
-      setLifestage("");
-      setGender("");
-    }
+  if (selectedOption && (selectedOption.label === "J.LINDEBERG_AB" || selectedOption.value === "J.LINDEBERG_AB")) {
+    setLifestage("Adult");
+    setGender("Men");
+  }else if (selectedOption && (selectedOption.label === "ROCKSERI_OY" || selectedOption.value === "ROCKSERI_OY")) {
+    setLifestage("Adult");
+    setGender("Women");
+  }else {
+    setLifestage("");
+    setGender("");
+  }
   };
 
   const handleBrandChange = (selectedOption) => {
     setSelectedBrand(selectedOption);
   };
 
-  const supplierDepts = selectedSupplier
-    ? getDepartmentsForSupplier(selectedSupplier.value).map(d => ({
-        ...d,
-        isSupplierDept: true
-      }))
-    : [];
-
-  const allOptions = selectedSupplier
-    ? [
-        ...supplierDepts,
-        ...departments().filter(d => !supplierDepts.some(sd => sd.value === d.value))
-      ]
-    : departments();
-
- const handleDepartmentChange = (selectedOption) => {
-    setselectedDepartment(selectedOption||" ");
-     if (selectedOption?.value === "MULTIPLE_DEPARTMENTS") {
-    // Reset department, gender, lifestage → nothing added
-    setGender("");
-    setLifestage("");
-    return;
-  }
-    if (selectedOption) {
-    const deptId = selectedOption.value;
-    
-    // Set Gender
-    if (departmentGenderMap.Men.includes(deptId)) {
-      setGender("Men");
-    } else if (departmentGenderMap.Women.includes(deptId)) {
-      setGender("Women");
-    }  else {
-      setGender("");
-    }
-
-    // Set Lifestage
-    if (departmentLifestageMap.Adult.includes(deptId)) {
-      setLifestage("Adult");
-    } else if (departmentLifestageMap.Kids.includes(deptId)) {
-      setLifestage("Kids");
-    } else {
-      setLifestage("");
-    }
-
-  } else {
-    setGender("");
-    setLifestage("");
-  }
-  };
-
-
   const handlePOLocationChange = (selectedOption) => {
     setPOLocation(selectedOption);
     if (selectedOption === "Distribution Centre DR warehouse") {
       setPOType("CD");
-    } else if (["Distribution Centre B&M", "Helsinki Department Store", "Itis Department Store", "Jumbo Department Store", "Riga Department Store", "Tallinn Department Store", "Tampere Department Store", "Tapiola Department Store", "Turku Department Store"].includes(selectedOption)) {
+  } else if (["Distribution Centre B&M", "Helsinki Department Store", "Itis Department Store", "Jumbo Department Store", "Riga Department Store", "Tallinn Department Store", "Tampere Department Store", "Tapiola Department Store", "Turku Department Store"].includes(selectedOption)) {
       setPOType("PRE");
-    }
+  }
   };
 
   const handlePOTypeChange = (selectedOption) => {
     setPOType(selectedOption);
     if (selectedOption === "CD" && poLocation === "Distribution Centre B&M") {
       setPOLocation("Distribution Centre DR warehouse");
-    } else if (selectedOption === "PRE" && poLocation === "Distribution Centre DR warehouse") {
+  } else if (selectedOption === "PRE" && poLocation === "Distribution Centre DR warehouse") {
       setPOLocation("Distribution Centre B&M");
-    }
+  }
   };
 
   return (
@@ -299,7 +248,7 @@ function Upload() {
       <Row className="justify-content-md-center mt-5">
         <Col md="8">
           <Form ref={formRef} className="p-4 bg-light rounded shadow">
-            <h4 className="mb-4">Product Creation Form - TEST ONLY</h4>
+            <h4 className="mb-4">Product Creation Form - QAT</h4>
             {errorMessage && <Alert variant="danger">{errorMessage}</Alert>}
             <Row>
               <Col md="6">
@@ -326,36 +275,12 @@ function Upload() {
                     />
                   </Form.Group>
                 )}
-       <Form.Group className="mb-3">
-       <Form.Label> Departments <span style={{ color: "red" }}>*</span></Form.Label>
-       <Select
-        options={allOptions}
-        onChange={handleDepartmentChange}
-        value={selectedDepartment || null}
-        placeholder="Select a department..."
-        isSearchable={true}
-        isClearable={true}
-        getOptionLabel={(option) => option.label}
-        getOptionValue={(option) => option.value}
-        styles={{
-        option: (provided, state) => ({
-        ...provided,
-        backgroundColor: state.isFocused
-        ? "#0d6efd" // very dark blue on hover
-        : state.data.isSupplierDept
-        ? "#d6e9ff" // grey-blue for supplier departments when not focused
-        : "white",
-          color: state.isFocused ? "white" : "black"
-          })
-        }}
-        />
-      </Form.Group>
                 <Form.Group className="mb-3">
                   <Form.Label>Assortment Lead <span style={{ color: "red" }}>*</span></Form.Label>
                   <Form.Select aria-label="Select Assortment Lead" onChange={(e) => setBuyer(e.target.value)} value={buyer} required>
-                    <option value="" disabled>Select Assortment Lead...</option>
+                  <option value="" disabled selected>Select Assortment Lead...</option>
                     {buyers.map((b, index) => (
-                      <option key={index} value={b}>{b}</option>
+                  <option key={index} value={b}>{b}</option>         
                     ))}
                   </Form.Select>
                 </Form.Group>
@@ -388,9 +313,9 @@ function Upload() {
                 <Form.Group className="mb-3">
                   <Form.Label>Consumer Lifestage <span style={{ color: "red" }}>*</span></Form.Label>
                   <Form.Select aria-label="Select Lifestage" onChange={(e) => setLifestage(e.target.value)} value={lifestage} required>
-                    <option value="" disabled>Select Consumer Lifestage...</option>
+                  <option value="" disabled selected>Select Consumer Lifestage...</option>
                     {lifestages.map((ls, index) => (
-                      <option key={index} value={ls}>{ls}</option>
+                  <option key={index} value={ls}>{ls}</option>
                     ))}
                   </Form.Select>
                 </Form.Group>
@@ -406,9 +331,9 @@ function Upload() {
                 <Form.Group className="mb-3">
                   <Form.Label>ST User <span style={{ color: "red" }}>*</span></Form.Label>
                   <Form.Select aria-label="Select ST User" onChange={(e) => setSTUser(e.target.value)} value={ST_user} required>
-                    <option value="" disabled>Select ST User...</option>
+                  <option value="" disabled selected>Select ST User...</option>
                     {ST_users.map((user, index) => (
-                      <option key={index} value={user}>{user}</option>
+                  <option key={index} value={user}>{user}</option>
                     ))}
                   </Form.Select>
                 </Form.Group>
@@ -495,7 +420,7 @@ function Upload() {
             </Row>
           </Form>
           {/* When the user clicks submit, the file will be converted, downloaded, and then the confirmation modal appears */}
-          <SubmitButton onClick={() => handleConvertAndDownload()} />
+          <SubmitButton onClick={handleConvertAndDownload} />
         </Col>
       </Row>
     </Container>
