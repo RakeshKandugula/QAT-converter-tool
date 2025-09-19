@@ -13,7 +13,7 @@ export const multiplicationFactorOptions = [
 ];
 
 export { getSupplierOptions as suppliers } from './supplierData';
-
+export { getDepartmentOptions as departments, getDepartmentsForSupplier, departmentGenderMap, departmentLifestageMap} from './DepartmentsData';
 
 export const brands = {
   "VF_SCANDINAVIA_A/S": [
