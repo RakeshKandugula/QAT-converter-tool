@@ -32,7 +32,7 @@ export const departments = [
   { value: "DEPT_705", label: "705 - Sport Apparel and Accessories" },
   { value: "DEPT_709", label: "709 - Sport Footwear" },
   { value: "DEPT_369", label: "369 - Synsam sunglasses" },
-  { value: "DEPT_230", label: "238 - Women local buying Baltics" },
+  { value: "DEPT_230", label: "230 - Women local buying Baltics" },
   { value: "DEPT_340", label: "340 - Women's accessories local buying Baltics" },
   { value: "DEPT_235", label: "235 - Women's Casual Fashion" },
   { value: "DEPT_212", label: "212 - Women's Classic Fashion" },
@@ -47,7 +47,8 @@ export const departments = [
   { value: "DEPT_208", label: "208 - Women's Modern Fashion" },
   { value: "DEPT_308", label: "308 - Women's Night and Loungewear" },
   { value: "DEPT_259", label: "259 - Women's Soft Accessories" },
-  { value: "DEPT_237", label: "237 - Women's Swimwear" }
+  { value: "DEPT_237", label: "237 - Women's Swimwear" },
+  { value: "DEPT_361", label: "361 - The Vintage Bar" }
 ];
 
 //Gender Map
