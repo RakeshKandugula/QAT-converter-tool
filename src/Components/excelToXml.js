@@ -111,7 +111,13 @@ function convert(
     data = XLSX.utils.sheet_to_json(workbook.Sheets[sheetName], { header: 1,range: 4, raw: false });
   }else if (supplierName === "COACH_OPERATIONS_SINGAPORE_PTE_LTD") {
     data = XLSX.utils.sheet_to_json(workbook.Sheets[sheetName], { header: 1,range: 2,raw: false });
-  }else if(supplierName==="WORK_IN_PROGRESS_GMBH"){
+  } else if(supplierName==="RODEL_S.P.A."){
+      const sheet = workbook.Sheets[sheetName];
+      const fullRange = XLSX.utils.decode_range(sheet['!ref']);
+      fullRange.s.r=findHeaderRow(sheet);
+      //console.log(fullRange.s+"--"+supplierName);
+     data = XLSX.utils.sheet_to_json(sheet, { header: 1, range: fullRange });
+    } else if(supplierName==="WORK_IN_PROGRESS_GMBH"){
       const sheet = workbook.Sheets[sheetName];
       const fullRange = XLSX.utils.decode_range(sheet['!ref']);
       fullRange.s.r=findHeaderRow(sheet);
