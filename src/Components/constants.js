@@ -56,7 +56,11 @@ export const brands = {
   "S_GROUP_APS": [
     { value: "Paul Smith", label: "Paul Smith" },
     { value: "PS Paul Smith", label: "PS Paul Smith" }
-  ]  
+  ],
+  "RODEL_S.P.A.":[
+    { value: "Cinzia Rocca", label: "Cinzia Rocca" },
+    { value: "Cinzia Rocca Icons", label: "Cinzia Rocca Icons" }
+  ]
 };
 
 
