@@ -124,7 +124,7 @@ function convert(
      data = XLSX.utils.sheet_to_json(sheet, { header: 1, range: fullRange });
     }else if (supplierName === "OSCAR_JACOBSON_AB") {
     data = XLSX.utils.sheet_to_json(workbook.Sheets[sheetName], { header: 1,range: 2,raw: false });
-  }else if (supplierName === "testsupplier1" || supplierName === "testsupplier2") {
+  }else if (supplierName === "testsupplier1" || supplierName === "JOUTSEN_FINLAND_OY") {
     console.log(`Sheet name: ${supplierName}`);
     data = XLSX.utils.sheet_to_json(workbook.Sheets[sheetName], { header: 1, range: 1});
   } else if (supplierName === "Marc_OPolo_International_GmbH") {
