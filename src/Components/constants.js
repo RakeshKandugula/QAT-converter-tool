@@ -60,6 +60,14 @@ export const brands = {
   "RODEL_S.P.A.":[
     { value: "Cinzia Rocca", label: "Cinzia Rocca" },
     { value: "Cinzia Rocca Icons", label: "Cinzia Rocca Icons" }
+  ],
+  "GERISALE_AB":[
+    { value: "Saucony", label: "Saucony" },
+    { value: "Saucony Originals", label: "Saucony Originals" }
+  ],
+   "DEDIMAX_S.R.L.": [
+    { value: "EMM", label: "Emme Marella / Marella" },
+    { value: "Pennyblack", label: "Pennyblack" }
   ]
 };
 
