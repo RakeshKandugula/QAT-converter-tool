@@ -64,10 +64,6 @@ export const brands = {
   "GERISALE_AB":[
     { value: "Saucony", label: "Saucony" },
     { value: "Saucony Originals", label: "Saucony Originals" }
-  ],
-   "DEDIMAX_S.R.L.": [
-    { value: "EMM", label: "Emme Marella / Marella" },
-    { value: "Pennyblack", label: "Pennyblack" }
   ]
 };
 
