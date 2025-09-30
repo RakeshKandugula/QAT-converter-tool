@@ -211,7 +211,7 @@ function convert(
       const fullRange = XLSX.utils.decode_range(sheet['!ref']);
       fullRange.s.r=findHeaderRow(sheet);
      data = XLSX.utils.sheet_to_json(sheet, { header: 1, range: fullRange });
-    }else if(supplierName==="ONLINE_TEXTILE_SOLUTIONS_A/S"){
+    }else if(supplierName==="ONLINE_TEXTILE_SOLUTIONS_A/S"|| supplierName === "BERG_BRAND_MANAGEMENT_ApS"){
       const sheet = workbook.Sheets[sheetName];
       const fullRange = XLSX.utils.decode_range(sheet['!ref']);
       fullRange.s.r=findHeaderRow(sheet);
