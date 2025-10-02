@@ -1,10 +1,11 @@
 export const multiplicationFactorOptions = [
+  { value: 1.7, label: 1.7 },
   { value: 2.5, label: 2.5 },
   { value: 2.6, label: 2.6 },
   { value: 2.7, label: 2.7 },
   { value: 2.8, label: 2.8 },
   { value: 2.9, label: 2.9 },
-  { value: 3, label: 3 },
+  { value: 3,   label: 3 },
   { value: 3.1, label: 3.1 },
   { value: 3.2, label: 3.2 },
   { value: 3.3, label: 3.3 },
