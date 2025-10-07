@@ -319,7 +319,7 @@ function Upload() {
                   </Form.Group>
                 )}
                  <Form.Group className="mb-3">
-       <Form.Label> Departments <span style={{ color: "red" }}>*</span></Form.Label>
+       <Form.Label> Department <span style={{ color: "red" }}>*</span></Form.Label>
        <Select
         options={allOptions}
         onChange={handleDepartmentChange}
