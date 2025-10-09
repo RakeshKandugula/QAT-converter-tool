@@ -215,7 +215,7 @@ function convert(
       const sheet = workbook.Sheets[sheetName];
       const fullRange = XLSX.utils.decode_range(sheet['!ref']);
       fullRange.s.r=findHeaderRow(sheet);
-      console.log(fullRange.s+"--"+supplierName);
+      console.log(fullRange.s+"--"+supplierName+" header "+fullRange.s.r);
      data = XLSX.utils.sheet_to_json(sheet, { header: 1, range: fullRange });
     }
  else {
