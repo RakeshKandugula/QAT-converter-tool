@@ -66,6 +66,10 @@ export const brands = {
   "GERISALE_AB":[
     { value: "Saucony", label: "Saucony" },
     { value: "Saucony Originals", label: "Saucony Originals" }
+  ],
+  "BRANDS_OF_SCANDINAVIA_A/S" : [
+      { value: "Freequent", label: "Freequent"},
+      { value: "Cph Muse", label: "Cph Muse" }  
   ]
 };
 
