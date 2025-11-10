@@ -645,7 +645,6 @@ export const supplierDepartmentMapping = {
   // Handle special suppliers that have different values than labels
   const specialSupplierMap = {
    "FALKE_KGAA_SCHMALLENBERG"        : "FALKE_KGAA", 
-   "ECCO_KENKÄ_OY"                   : "ECCO_KENKA_OY",
    "DKH_RETAIL_LTD_(BO_GRANT_THORNTON_EFFICIENTIA)":"DKH_RETAIL_LTD_(BO_GRANT_THORNTON_EFFIC)",
    "Samsøe_&_Samsøe_Whole_Sale_ApS" :"Samsoe_&_Samsoe_Whole_Sale_ApS",
    "NEW_BALANCE_DENMARK_APS,_SUOMEN_SIVULIIKE":"NEW_BALANCE_DENMARK_APS,_S_S",
