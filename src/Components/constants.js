@@ -22,6 +22,10 @@ export const brands = {
     { value: "Timberland", label: "Timberland" },
     { value: "Eastpak", label: "Eastpak" }
   ],
+  NEW_BALANCE_DENMARK_APS: [
+    { value: "Apparel", label: "Apparel" },
+    { value: "Footwear", label: "Footwear" }
+  ],
   ADIDAS_SUOMI_OY: [
     { value: "(RTW)", label: "ADIDAS_SUOMI_OY(RTW)" },
     { value: "(Sports)", label: "ADIDAS_SUOMI_OY(Sports)" }
