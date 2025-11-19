@@ -363,7 +363,8 @@ export const suppliers = [
   "ZV_FRANCE_S.A.S.",
   "PVH_FINLAND_OY",
   "testsupplier1",
-  "testsupplier2"
+  "testsupplier2", 
+  "NEW_BALANCE_DENMARK_APS"
 ];
 
 
