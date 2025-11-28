@@ -162,11 +162,11 @@ function convert(
       fullRange.s.r=findHeaderRow(sheet);
       console.log(fullRange.s);
      data = XLSX.utils.sheet_to_json(sheet, { header: 1, range: fullRange });
-    }else if (supplierName === "DIDRIKSONS_FINLAND_OY") {
+    }else if (supplierName === "DIDRIKSONS_FINLAND_OY1") {
     const sheet = workbook.Sheets[sheetName];
    //  Decode range and start at Excel row 7 (0-based index 6)
     const fullRange = XLSX.utils.decode_range(sheet['!ref']);
-    fullRange.s.r = 6;  // row 7 becomes header
+    fullRange.s.r = 7;  // row 7 becomes header
     data = XLSX.utils.sheet_to_json(sheet, { header: 1, range: fullRange });
     //  Remove the first data row (Excel row 8)
     if (data.length > 1) {
