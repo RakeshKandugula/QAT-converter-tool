@@ -72,7 +72,8 @@ function convert(
   nb,
   na,
   mf,
-  dealInfo
+  dealInfo,
+  vatPriceChange
 ) {
   const inputFileName = file.name;
   let workbook="";
@@ -285,6 +286,7 @@ function convert(
   Product2.ele('Value', { AttributeID: "att_tool_tickettype" }).txt(ticketTypeValue);
   Product2.ele('Value', { AttributeID: "att_tool_brand" }).txt(brand ? brand.value : "");
   Product2.ele('Value', { AttributeID: "att_tool_dealinfo" }).txt(dealInfo);
+   Product2.ele('Value', { AttributeID: "att_tool_vat" }).txt(vatPriceChange ? vatPriceChange : "");
   const xmlString = root.end({ pretty: true });
 
   return { success: true, xmlString };
