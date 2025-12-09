@@ -78,6 +78,10 @@ export const brands = {
   "BRANDS_OF_SCANDINAVIA_A/S" : [
       { value: "Freequent", label: "Freequent"},
       { value: "Cph Muse", label: "Cph Muse" }  
+  ],
+  "TLKE_LDA" :[
+    { value: "Lauren Ralph Lauren", label: "Lauren Ralph Lauren" },
+    { value: "Marchesa", label: "Marchesa" }
   ]
 };
 
