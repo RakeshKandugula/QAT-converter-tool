@@ -329,7 +329,7 @@ const buildApiPromoDisplay = () => {
   const fetchCampaigns = async () => {
     try {
       setLoadingCampaigns(true);
-      const res = await axios.get("http://52.211.13.154/campaigns");
+      const res = await axios.get("https://wihf08zxfd.execute-api.eu-west-1.amazonaws.com/qa/campaigns");
       setCampaigns(res.data);
     } catch (err) {
       console.error("Campaign API Error:", err);
