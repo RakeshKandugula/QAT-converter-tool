@@ -3,7 +3,7 @@ import { Container, Row, Col, Form, Alert, Modal, Button, Toast, ToastContainer 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Select from 'react-select';
 import { convert, allowedFile } from "./excelToXml";  // Ensure this is correctly implemented
-import { suppliers, departments, getDepartmentsForSupplier, departmentGenderMap, departmentLifestageMap, buyers, seasons, phases, lifestages, genders, ST_users, ticketTypes, poLocations, poTypes, poEDIs, orderPriceTags, multiplicationFactorOptions, brands } from './constants';
+import { suppliers, departments, getDepartmentsForSupplier, departmentGenderMap, departmentLifestageMap, buyers, seasons, phases, lifestages, genders, ST_users, ticketTypes, poLocations, poTypes, poEDIs, orderPriceTags, multiplicationFactorOptions, brands, pps } from './constants';
 import SubmitButton from './SubmitButton';  // Import the new component
 import '../styles/styles.css';
 import axios from 'axios';
@@ -34,6 +34,69 @@ function Upload() {
   const [showSuccessToast, setShowSuccessToast] = useState(false);
   const [convertedBlob, setConvertedBlob] = useState(null); // State to store the converted XML file
   const [dealInfo, setDealInfo] = useState("");
+   const [pp, setPP] = useState("No");
+  const [showPromoViewModal, setShowPromoViewModal] = useState(false);
+
+  const [showPromoModal, setShowPromoModal] = useState(false);
+  const [promoFormData, setPromoFormData] = useState({
+    promoName: "",
+    promoBudget: "",
+    promoStart: "",
+    promoEnd: ""
+  });
+  const [savedPromoData, setSavedPromoData] = useState(null);
+  const [campaigns, setCampaigns] = useState([]);
+  const [loadingCampaigns, setLoadingCampaigns] = useState(false);
+
+  const [promoType, setPromoType] = useState("");
+
+  const currentYear = new Date().getFullYear();
+  const years = [currentYear, currentYear + 1, currentYear + 2];
+
+  const [promoDisplayText, setPromoDisplayText] = useState("");
+
+  const allMonths = [
+    { value: 0, label: "January" },
+    { value: 1, label: "February" },
+    { value: 2, label: "March" },
+    { value: 3, label: "April" },
+    { value: 4, label: "May" },
+    { value: 5, label: "June" },
+    { value: 6, label: "July" },
+    { value: 7, label: "August" },
+    { value: 8, label: "September" },
+    { value: 9, label: "October" },
+    { value: 10, label: "November" },
+    { value: 11, label: "December" }
+  ];
+
+  const today = new Date();
+  const [manualPromoData, setManualPromoData] = useState({
+    year: "",
+    month: "",
+    duration: "",
+    category: "",
+    discount: "",
+    applicableAreas: []
+  });
+
+
+  const [selectedEvent, setSelectedEvent] = useState("");        // Radio (Level 1)
+  const [selectedPromos, setSelectedPromos] = useState({});     // Checkbox (Level 2)
+
+  const [expandedEvent, setExpandedEvent] = useState(null);   // event expand
+  const [expandedPromo, setExpandedPromo] = useState(null);   // promo expand
+
+const isManualFilled =
+  promoType &&
+  (manualPromoData.year ||
+    manualPromoData.month ||
+    manualPromoData.duration ||
+    manualPromoData.category ||
+    manualPromoData.discount ||
+    manualPromoData.applicableAreas.length > 0);
+
+const isApiSelected = Object.keys(selectedPromos).length > 0;
 
   const formRef = useRef(null);  // Ref for form element
 
@@ -61,7 +124,74 @@ function Upload() {
     setFileInputKey(Date.now());
     setConvertedBlob(null);
     setDealInfo("");
+    setPP("No");
+    setSavedPromoData(null);
+    setPromoFormData({
+      promoName: "",
+      promoBudget: "",
+      promoStart: "",
+      promoEnd: ""
+    });
+    setPromoDisplayText("");
   };
+
+const handlePromoCancel = () => {
+  setShowPromoModal(false);
+
+  // ✅ Only revert to NO if nothing was ever saved
+  if (!savedPromoData) {
+    setPP("No");
+  }
+
+  setExpandedEvent(null);
+  setExpandedPromo(null);
+};
+
+
+  const handlePromoSave = () => {
+  setSavedPromoData(selectedPromos);  // ✅ Save only checked components
+  setShowPromoModal(false);
+  setPP("Yes");
+};
+
+  const getAvailableMonths = () => {
+    if (!manualPromoData.year) return allMonths;
+    if (parseInt(manualPromoData.year) === currentYear) {
+      return allMonths.filter(m => m.value >= today.getMonth());
+    }
+    return allMonths;
+  };
+
+  const buildManualPromoDisplay = () => {
+  const { year, month, duration, category, discount, applicableAreas } = manualPromoData;
+
+  return applicableAreas
+    .map(area =>
+      [
+        promoType,
+        year,
+        month || duration || category || discount,
+        area
+      ]
+        .filter(Boolean)
+        .join(" | ")
+    )
+    .join(" ; ");
+};
+
+const buildApiPromoDisplay = () => {
+  const output = [];
+
+  campaigns.forEach(campaign => {
+    Object.entries(selectedPromos).forEach(([promoName, comps]) => {
+      comps.forEach(comp => {
+        output.push(`${campaign.event} | ${promoName} | ${comp}`);
+      });
+    });
+  });
+
+  return output.join(" ; ");
+};
 
   const handleFileChange = (e) => {
     setFile(e.target.files[0]);
@@ -107,7 +237,8 @@ function Upload() {
           notAfter,
           multiplicationFactor,
           dealInfo,
-          vatPriceChange
+          vatPriceChange,
+          savedPromoData
         );
 
         // Check if conversion was successful
@@ -187,7 +318,41 @@ function Upload() {
   };
 
   const brandOptions = selectedSupplier ? brands[selectedSupplier.value] || [] : [];
+ React.useEffect(() => {
+    if (showPromoModal) {
+      fetchCampaigns();
+    }
+  }, [showPromoModal]);
 
+  React.useEffect(() => {
+  if (showPromoModal && savedPromoData?.source === "API") {
+    setSelectedPromos(savedPromoData.promos || {});
+  }
+
+  if (showPromoModal && savedPromoData?.source === "MANUAL") {
+    setPromoType(savedPromoData.promoType || "");
+    setManualPromoData({
+      year: savedPromoData.year || "",
+      month: savedPromoData.month || "",
+      duration: savedPromoData.duration || "",
+      category: savedPromoData.category || "",
+      discount: savedPromoData.discount || "",
+      applicableAreas: savedPromoData.applicableAreas || []
+    });
+  }
+}, [showPromoModal]);
+
+  const fetchCampaigns = async () => {
+    try {
+      setLoadingCampaigns(true);
+      const res = await axios.get("http://127.0.0.1:8000/campaigns");
+      setCampaigns(res.data);
+    } catch (err) {
+      console.error("Campaign API Error:", err);
+    } finally {
+      setLoadingCampaigns(false);
+    }
+  };
   const handleSupplierChange = (selectedOption) => {
     setSelectedSupplier(selectedOption);
     setSelectedBrand(null); // Reset brand selection when supplier changes
@@ -288,6 +453,439 @@ function Upload() {
         <Modal.Footer>
           <Button variant="secondary" onClick={() => setShowConfirmation(false)}>Cancel</Button>
           <Button variant="danger" onClick={handleConfirmSubmit}>Yes, Send</Button>
+        </Modal.Footer>
+      </Modal>
+
+      {/* Promo View Modal */}
+      <Modal
+        show={showPromoViewModal}
+        onHide={() => setShowPromoViewModal(false)}
+        size="lg"
+        centered
+      >
+        <Modal.Header closeButton>
+          <Modal.Title>Selected Promotions</Modal.Title>
+        </Modal.Header>
+
+        <Modal.Body>
+          {savedPromoData?.source === "MANUAL" && (
+            <>
+              <h6>Manual Promotion</h6>
+              <table className="table table-bordered mt-3">
+                <thead>
+                  <tr>
+                    <th>Promo Type</th>
+                    <th>Year</th>
+                    <th>Month / Duration</th>
+                    <th>Area</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {savedPromoData.applicableAreas.map((area, idx) => (
+                    <tr key={idx}>
+                      <td>{savedPromoData.promoType}</td>
+                      <td>{savedPromoData.year}</td>
+                      <td>
+                        {savedPromoData.month ||
+                          savedPromoData.duration ||
+                          savedPromoData.category ||
+                          savedPromoData.discount}
+                      </td>
+                      <td>{area}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </>
+          )}
+
+          {savedPromoData?.source === "API" && (
+            <>
+              <h6>API Campaign Selection</h6>
+              <table className="table table-bordered mt-3">
+                <thead>
+                  <tr>
+                    <th>Event</th>
+                    <th>Promo</th>
+                    <th>Component</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {Object.entries(savedPromoData.promos).map(([promoName, comps]) =>
+                    comps.map((comp, idx) => {
+                      const eventName =
+                        campaigns.find(c =>
+                          Object.keys(c.promos).includes(promoName)
+                        )?.event || "-";
+
+                      return (
+                        <tr key={`${promoName}-${idx}`}>
+                          <td>{eventName}</td>
+                          <td>{promoName}</td>
+                          <td>{comp}</td>
+                        </tr>
+                      );
+                    })
+                  )}
+                </tbody>
+              </table>
+            </>
+          )}
+        </Modal.Body>
+
+        <Modal.Footer>
+          <Button variant="secondary" onClick={() => setShowPromoViewModal(false)}>
+            Close
+          </Button>
+        </Modal.Footer>
+      </Modal>
+
+      {/* Promo Entry Modal */}
+      <Modal show={showPromoModal} onHide={handlePromoCancel} size="xl" centered>
+        <Modal.Header closeButton>
+          <Modal.Title>Promo Proposal</Modal.Title>
+        </Modal.Header>
+
+        <Modal.Body style={{ maxHeight: "75vh", overflowY: "auto" }}>
+
+          {/* ===================== */}
+          {/* ✅ MANUAL ENTRY SECTION */}
+          {/* ===================== */}
+          <h5 className="mb-3">Manual Promo Entry</h5>
+
+          {isApiSelected && (
+            <Alert variant="warning">
+              You are using <strong>API Campaign Selection</strong>.
+              Manual entry is disabled.
+            </Alert>
+          )}
+
+          <div style={{
+            opacity: isApiSelected ? 0.4 : 1,
+            pointerEvents: isApiSelected ? "none" : "auto"
+          }}>
+            <Form.Group className="mb-3">
+              <Form.Label>Promo Type</Form.Label>
+              <Form.Select
+                value={promoType}
+                onChange={(e) => {
+                  setSelectedPromos({});
+                  setPromoDisplayText("");
+                  setPromoType(e.target.value);
+                  setManualPromoData({
+                    year: "",
+                    month: "",
+                    duration: "",
+                    category: "",
+                    discount: "",
+                    applicableAreas: []
+                  });
+                }}
+              >
+                <option value="">Select Type...</option>
+                <option>LC</option>
+                <option>CD</option>
+                <option>Magazine</option>
+                <option>Buyers Own Promotion</option>
+                <option>Launches</option>
+              </Form.Select>
+            </Form.Group>
+
+            {/* ✅ YEAR (COMMON FOR ALL) */}
+            {promoType && (
+              <Form.Group className="mb-3">
+                <Form.Label>Year</Form.Label>
+                <Form.Select
+                  value={manualPromoData.year}
+                  onChange={(e) =>
+                    setManualPromoData({ ...manualPromoData, year: e.target.value })
+                  }
+                >
+                  <option value="">Select Year...</option>
+                  {years.map(y => (
+                    <option key={y} value={y}>{y}</option>
+                  ))}
+                </Form.Select>
+              </Form.Group>
+            )}
+
+            {/* ✅ LC */}
+            {promoType === "LC" && (
+              <>
+                <Form.Group className="mb-3">
+                  <Form.Label>Month</Form.Label>
+                  <Form.Select
+                    value={manualPromoData.month}
+                    onChange={(e) =>
+                      setManualPromoData({ ...manualPromoData, month: e.target.value })
+                    }
+                  >
+                    <option value="">Select Month...</option>
+                    {getAvailableMonths().map(m => (
+                      <option key={m.value} value={m.label}>{m.label}</option>
+                    ))}
+                  </Form.Select>
+                </Form.Group>
+
+                <Form.Label>Applicable Areas</Form.Label>
+                {["L FI", "Non L FI", "L BA", "Non L BA"].map(area => (
+                  <Form.Check
+                    key={area}
+                    type="checkbox"
+                    label={area}
+                    checked={manualPromoData.applicableAreas.includes(area)}
+                    onChange={(e) => {
+                      const updated = [...manualPromoData.applicableAreas];
+                      e.target.checked
+                        ? updated.push(area)
+                        : updated.splice(updated.indexOf(area), 1);
+
+                      setManualPromoData({ ...manualPromoData, applicableAreas: updated });
+                    }}
+                  />
+                ))}
+              </>
+            )}
+
+            {/* ✅ CD */}
+            {promoType === "CD" && (
+              <>
+                <Form.Group className="mb-3">
+                  <Form.Label>Duration</Form.Label>
+                  <Form.Select
+                    value={manualPromoData.duration}
+                    onChange={(e) =>
+                      setManualPromoData({ ...manualPromoData, duration: e.target.value })
+                    }
+                  >
+                    <option value="">Select...</option>
+                    <option>Spring</option>
+                    <option>Autumn</option>
+                  </Form.Select>
+                </Form.Group>
+
+                <Form.Label>Applicable Areas</Form.Label>
+                {[
+                  "L FI", "Non L FI", "Additions FIBA",
+                  "Normal priced items", "Only Web FIBA", "WEB Evening"
+                ].map(area => (
+                  <Form.Check
+                    key={area}
+                    type="checkbox"
+                    label={area}
+                    checked={manualPromoData.applicableAreas.includes(area)}
+                    onChange={(e) => {
+                      const updated = [...manualPromoData.applicableAreas];
+                      e.target.checked
+                        ? updated.push(area)
+                        : updated.splice(updated.indexOf(area), 1);
+
+                      setManualPromoData({ ...manualPromoData, applicableAreas: updated });
+                    }}
+                  />
+                ))}
+              </>
+            )}
+
+            {/* ✅ MAGAZINE */}
+            {promoType === "Magazine" && (
+              <Form.Group className="mb-3">
+                <Form.Label>Month</Form.Label>
+                <Form.Select
+                  value={manualPromoData.month}
+                  onChange={(e) =>
+                    setManualPromoData({ ...manualPromoData, month: e.target.value })
+                  }
+                >
+                  <option value="">Select Month...</option>
+                  {getAvailableMonths().map(m => (
+                    <option key={m.value} value={m.label}>{m.label}</option>
+                  ))}
+                </Form.Select>
+              </Form.Group>
+            )}
+
+            {/* ✅ BUYERS OWN PROMOTION */}
+            {promoType === "Buyers Own Promotion" && (
+              <>
+                <Form.Label>Category</Form.Label>
+                {["Men", "Women", "Children"].map(cat => (
+                  <Form.Check
+                    key={cat}
+                    type="radio"
+                    name="promoCategory"
+                    label={cat}
+                    checked={manualPromoData.category === cat}
+                    onChange={() =>
+                      setManualPromoData({ ...manualPromoData, category: cat })
+                    }
+                  />
+                ))}
+              </>
+            )}
+
+            {/* ✅ LAUNCHES */}
+            {promoType === "Launches" && (
+              <Form.Group className="mb-3">
+                <Form.Label>Discount</Form.Label>
+                <Form.Select
+                  value={manualPromoData.discount}
+                  onChange={(e) =>
+                    setManualPromoData({ ...manualPromoData, discount: e.target.value })
+                  }
+                >
+                  <option value="">Select...</option>
+                  <option>10%</option>
+                  <option>15%</option>
+                </Form.Select>
+              </Form.Group>
+            )}
+
+          </div>
+
+          <hr />
+
+          {/* ===================== */}
+          {/* ✅ API LOADED SECTION */}
+          {/* ===================== */}
+          <h5 className="mb-3">Load From Existing Campaigns</h5>
+
+          {isManualFilled && (
+            <Alert variant="warning">
+              You are using <strong>Manual Promo Entry</strong>.
+              API selection is disabled.
+            </Alert>
+          )}
+
+          <div style={{
+            opacity: isManualFilled ? 0.4 : 1,
+            pointerEvents: isManualFilled ? "none" : "auto"
+          }}>
+
+            {loadingCampaigns && <p>Loading campaigns...</p>}
+
+            {!loadingCampaigns && campaigns.map((campaign, idx) => (
+              <div key={idx} style={{ marginBottom: "12px" }}>
+                <div
+                  style={{ cursor: "pointer", fontWeight: "bold" }}
+                  onClick={() =>
+                    setExpandedEvent(expandedEvent === campaign.event ? null : campaign.event)
+                  }
+                >
+                  {expandedEvent === campaign.event ? "▼" : "▶"} {campaign.event}
+                </div>
+
+                {expandedEvent === campaign.event && (
+                  <div style={{ paddingLeft: "20px" }}>
+                    {Object.entries(campaign.promos).map(([promoName, promoObj]) => (
+                      <div key={promoName}>
+                        <div
+                          style={{ cursor: "pointer", fontWeight: 600 }}
+                          onClick={() =>
+                            setExpandedPromo(expandedPromo === promoName ? null : promoName)
+                          }
+                        >
+                          {expandedPromo === promoName ? "▼" : "▶"} {promoName}
+                        </div>
+
+                        {expandedPromo === promoName && (
+                          <div style={{ paddingLeft: "25px" }}>
+                            {promoObj.promoComp.map((comp, i) => (
+                              <Form.Check
+                                key={i}
+                                type="checkbox"
+                                label={comp}
+                                checked={
+                                  selectedPromos?.[promoName]?.includes(comp) || false
+                                }
+                                onChange={(e) => {
+                                  setPromoType("");
+                                  setManualPromoData({
+                                    year: "",
+                                    month: "",
+                                    duration: "",
+                                    category: "",
+                                    discount: "",
+                                    applicableAreas: []
+                                  });
+                                  setPromoDisplayText("");
+                                  setSelectedPromos(prev => {
+                                    const updated = { ...prev };
+                                    const existing = updated[promoName] || [];
+
+                                    if (e.target.checked) {
+                                      updated[promoName] = [...existing, comp];
+                                    } else {
+                                      updated[promoName] =
+                                        existing.filter(x => x !== comp);
+                                    }
+                                    return updated;
+                                  });
+                                }}
+                              />
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+            ))}
+
+          </div>
+        </Modal.Body>
+
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handlePromoCancel}>
+            Cancel
+          </Button>
+
+          <Button
+            variant="success"
+            disabled={!isManualFilled && !isApiSelected && !savedPromoData}
+            onClick={() => {
+
+              if (isManualFilled && isApiSelected) {
+                alert("You can choose only ONE: Manual Promo OR API Campaign.");
+                return;
+              }
+
+              // ✅ MANUAL MODE SAVE
+              if (isManualFilled) {
+                const formatted = buildManualPromoDisplay();
+
+                setSavedPromoData({
+                  source: "MANUAL",
+                  promoType,
+                  ...manualPromoData,
+                  display: formatted
+                });
+
+                setPromoDisplayText(formatted);   // ✅ FOR MAIN SCREEN DISPLAY
+              }
+
+              // ✅ API MODE SAVE
+              if (isApiSelected) {
+                const formatted = buildApiPromoDisplay();
+
+                setSavedPromoData({
+                  source: "API",
+                  promos: selectedPromos,
+                  display: formatted
+                });
+
+                setPromoDisplayText(formatted);   // ✅ FOR MAIN SCREEN DISPLAY
+              }
+
+              setShowPromoModal(false);
+              setPP("Yes");
+            }}
+          >
+            Save Promo
+          </Button>
+
         </Modal.Footer>
       </Modal>
 
@@ -494,6 +1092,58 @@ function Upload() {
                     placeholder="Enter Deal Info..."
                   />
                 </Form.Group>
+                <Form.Group className="mb-3">
+                  <Form.Label>Promo Proposal</Form.Label>
+
+                  <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+                    <Form.Select
+                      aria-label="propose Promo"
+                      value={pp}
+                      onChange={(e) => {
+                        const value = e.target.value;
+
+                        if (value === "Yes") {
+                          setPP("Yes");
+                          setShowPromoModal(true);   // ✅ open overlay
+                        } else {
+                          setPP("No");
+                          setSavedPromoData(null);  // ✅ reset everything
+                        }
+                      }}
+                    >
+                      {pps.map((promop, index) => (
+                        <option key={index} value={promop}>
+                          {promop}
+                        </option>
+                      ))}
+                    </Form.Select>
+
+                    {pp === "Yes" && promoDisplayText && (
+                      <Form.Group className="mb-3">
+                        <Form.Label>Selected Promos</Form.Label>
+
+                        <div style={{ display: "flex", gap: "10px", alignItems: "center" }}>
+                          <Button
+                            variant="outline-success"
+                            onClick={() => setShowPromoViewModal(true)}
+                          >
+                            View Selected Promos
+                          </Button>
+
+                          <Button
+                            size="sm"
+                            variant="outline-primary"
+                            onClick={() => setShowPromoModal(true)}
+                          >
+                            Edit
+                          </Button>
+                        </div>
+                      </Form.Group>
+                    )}
+
+                  </div>
+                </Form.Group>
+
               </Col>
             </Row>
           </Form>

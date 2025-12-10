@@ -73,9 +73,45 @@ function convert(
   na,
   mf,
   dealInfo,
-  vatPriceChange
+  vatPriceChange,
+  promoData
 ) {
   const inputFileName = file.name;
+  let promoTextForXml = "";
+
+if (promoData) {
+  if (promoData.source === "MANUAL") {
+    const {
+      promoType,
+      year,
+      month,
+      duration,
+      category,
+      discount,
+      applicableAreas = []
+    } = promoData;
+
+    const timePart = month || duration || category || discount;
+
+    promoTextForXml = applicableAreas
+      .map(area =>
+        [promoType, year, timePart, area].filter(Boolean).join(" | ")
+      )
+      .join(" ; ");
+  }
+
+  if (promoData.source === "API") {
+    const rows = [];
+
+    Object.entries(promoData.promos || {}).forEach(([promoName, comps]) => {
+      comps.forEach(comp => {
+        rows.push(`${promoName} | ${comp}`);
+      });
+    });
+
+    promoTextForXml = rows.join(" ; ");
+  }
+}
   let workbook="";
   if (inputFileName.includes('csv') || inputFileName.includes('CSV')) {
     // Handle CSV file
@@ -286,6 +322,7 @@ function convert(
   Product2.ele('Value', { AttributeID: "att_tool_tickettype" }).txt(ticketTypeValue);
   Product2.ele('Value', { AttributeID: "att_tool_brand" }).txt(brand ? brand.value : "");
   Product2.ele('Value', { AttributeID: "att_tool_dealinfo" }).txt(dealInfo);
+  Product2.ele('Value', { AttributeID: "att_tool_promoproposal" }).txt(promoTextForXml);
    Product2.ele('Value', { AttributeID: "att_tool_vat" }).txt(vatPriceChange ? vatPriceChange : "");
   const xmlString = root.end({ pretty: true });
 
