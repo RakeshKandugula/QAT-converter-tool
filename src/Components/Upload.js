@@ -38,12 +38,6 @@ function Upload() {
   const [showPromoViewModal, setShowPromoViewModal] = useState(false);
 
   const [showPromoModal, setShowPromoModal] = useState(false);
-  const [promoFormData, setPromoFormData] = useState({
-    promoName: "",
-    promoBudget: "",
-    promoStart: "",
-    promoEnd: ""
-  });
   const [savedPromoData, setSavedPromoData] = useState(null);
   const [campaigns, setCampaigns] = useState([]);
   const [loadingCampaigns, setLoadingCampaigns] = useState(false);
@@ -81,7 +75,6 @@ function Upload() {
   });
 
 
-  const [selectedEvent, setSelectedEvent] = useState("");        // Radio (Level 1)
   const [selectedPromos, setSelectedPromos] = useState({});     // Checkbox (Level 2)
 
   const [expandedEvent, setExpandedEvent] = useState(null);   // event expand
@@ -126,12 +119,6 @@ const isApiSelected = Object.keys(selectedPromos).length > 0;
     setDealInfo("");
     setPP("No");
     setSavedPromoData(null);
-    setPromoFormData({
-      promoName: "",
-      promoBudget: "",
-      promoStart: "",
-      promoEnd: ""
-    });
     setPromoDisplayText("");
   };
 
@@ -148,11 +135,7 @@ const handlePromoCancel = () => {
 };
 
 
-  const handlePromoSave = () => {
-  setSavedPromoData(selectedPromos);  // ✅ Save only checked components
-  setShowPromoModal(false);
-  setPP("Yes");
-};
+
 
   const getAvailableMonths = () => {
     if (!manualPromoData.year) return allMonths;
@@ -340,12 +323,13 @@ const buildApiPromoDisplay = () => {
       applicableAreas: savedPromoData.applicableAreas || []
     });
   }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
 }, [showPromoModal]);
 
   const fetchCampaigns = async () => {
     try {
       setLoadingCampaigns(true);
-      const res = await axios.get("http://127.0.0.1:8000/campaigns");
+      const res = await axios.get("http://52.211.13.154/campaigns");
       setCampaigns(res.data);
     } catch (err) {
       console.error("Campaign API Error:", err);
