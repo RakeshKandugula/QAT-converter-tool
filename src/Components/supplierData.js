@@ -173,6 +173,7 @@ export const suppliers = [
   "LEAN_RETAIL_INT_AB",
   "LENER_CORDIER_SA",
   "LES_DEUX_APS",
+  "LE_GRAMME_INTERNATIONAL_SAS",
   "Levi_Strauss_&_Co_EUROPE_DE",
   "L-FASHION_GROUP_OY",
   "LIE_STUDIO_APS",
